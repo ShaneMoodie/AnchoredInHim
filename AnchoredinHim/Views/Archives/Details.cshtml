@@ -1,0 +1,50 @@
+﻿@model AnchoredinHim.Models.Archive
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Archive</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog.Post)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Blog.Post)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DailyDevotional.Devo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DailyDevotional.Devo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Event.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Event.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ArchivesID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
