@@ -3809,7 +3809,15 @@
 		}
 
 /* Menu */
+.dropdown-menu {
+    left: -50px;
+    background-color: #2a2a2b;
+}
 
+    .dropdown-menu > li > a {
+        color: #ffffff;
+        background-color: #2a2a2b;
+    }
 	#menu {
 		-moz-transition: -moz-transform 0.35s ease, opacity 0.35s ease, visibility 0.35s;
 		-webkit-transition: -webkit-transform 0.35s ease, opacity 0.35s ease, visibility 0.35s;
