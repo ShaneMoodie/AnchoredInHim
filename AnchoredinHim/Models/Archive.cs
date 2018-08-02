@@ -14,7 +14,7 @@ namespace AnchoredinHim.Models
     
     public partial class Archive
     {
-        public string ArchivesID { get; set; }
+        public int ArchivesID { get; set; }
         public System.DateTime Date { get; set; }
     
         public virtual Blog Blog { get; set; }

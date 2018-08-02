@@ -14,7 +14,7 @@ namespace AnchoredinHim.Models
     
     public partial class DailyDevotional
     {
-        public string DailyDevoID { get; set; }
+        public int DailyDevoID { get; set; }
         public string Devo { get; set; }
     
         public virtual Archive Archive { get; set; }

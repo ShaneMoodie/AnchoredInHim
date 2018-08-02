@@ -13,10 +13,10 @@ namespace AnchoredinHim.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class AnchoredinHimEntities : DbContext
+    public partial class AnchoredinHimEntities1 : DbContext
     {
-        public AnchoredinHimEntities()
-            : base("name=AnchoredinHimEntities")
+        public AnchoredinHimEntities1()
+            : base("name=AnchoredinHimEntities1")
         {
         }
     
@@ -26,9 +26,11 @@ namespace AnchoredinHim.Models
         }
     
         public virtual DbSet<Archive> Archives { get; set; }
+        public virtual DbSet<ATeamBmore> ATeamBmores { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<DailyDevotional> DailyDevotionals { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<Volunteer> Volunteers { get; set; }
     }
 }

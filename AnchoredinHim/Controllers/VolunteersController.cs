@@ -10,120 +10,112 @@ using AnchoredinHim.Models;
 
 namespace AnchoredinHim.Controllers
 {
-    public class ArchivesController : Controller
+    public class VolunteersController : Controller
     {
         private AnchoredinHimEntities1 db = new AnchoredinHimEntities1();
 
-        // GET: Archives
+        // GET: Volunteers
         public ActionResult Index()
         {
-            var archives = db.Archives.Include(a => a.Blog).Include(a => a.DailyDevotional).Include(a => a.Event);
-            return View(archives.ToList());
+            var volunteers = db.Volunteers.Include(v => v.Event);
+            return View(volunteers.ToList());
         }
 
-        // GET: Archives/Details/5
+        // GET: Volunteers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            Volunteer volunteer = db.Volunteers.Find(id);
+            if (volunteer == null)
             {
                 return HttpNotFound();
             }
-            return View(archive);
+            return View(volunteer);
         }
 
-        // GET: Archives/Create
+        // GET: Volunteers/Create
         public ActionResult Create()
         {
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post");
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo");
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name");
+            ViewBag.VolunteerID = new SelectList(db.Events, "EventID", "Name");
             return View();
         }
 
-        // POST: Archives/Create
+        // POST: Volunteers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ArchivesID,Date")] Archive archive)
+        public ActionResult Create([Bind(Include = "VolunteerID,Name,Address,Phone_Number")] Volunteer volunteer)
         {
             if (ModelState.IsValid)
             {
-                db.Archives.Add(archive);
+                db.Volunteers.Add(volunteer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            ViewBag.VolunteerID = new SelectList(db.Events, "EventID", "Name", volunteer.VolunteerID);
+            return View(volunteer);
         }
 
-        // GET: Archives/Edit/5
+        // GET: Volunteers/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            Volunteer volunteer = db.Volunteers.Find(id);
+            if (volunteer == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            ViewBag.VolunteerID = new SelectList(db.Events, "EventID", "Name", volunteer.VolunteerID);
+            return View(volunteer);
         }
 
-        // POST: Archives/Edit/5
+        // POST: Volunteers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ArchivesID,Date")] Archive archive)
+        public ActionResult Edit([Bind(Include = "VolunteerID,Name,Address,Phone_Number")] Volunteer volunteer)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(archive).State = EntityState.Modified;
+                db.Entry(volunteer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            ViewBag.VolunteerID = new SelectList(db.Events, "EventID", "Name", volunteer.VolunteerID);
+            return View(volunteer);
         }
 
-        // GET: Archives/Delete/5
+        // GET: Volunteers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            Volunteer volunteer = db.Volunteers.Find(id);
+            if (volunteer == null)
             {
                 return HttpNotFound();
             }
-            return View(archive);
+            return View(volunteer);
         }
 
-        // POST: Archives/Delete/5
+        // POST: Volunteers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Archive archive = db.Archives.Find(id);
-            db.Archives.Remove(archive);
+            Volunteer volunteer = db.Volunteers.Find(id);
+            db.Volunteers.Remove(volunteer);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

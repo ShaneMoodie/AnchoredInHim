@@ -12,11 +12,9 @@ namespace AnchoredinHim.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Blog
+    public partial class ATeamBmore
     {
-        public int BlogID { get; set; }
+        public int PostID { get; set; }
         public string Post { get; set; }
-    
-        public virtual Archive Archive { get; set; }
     }
 }

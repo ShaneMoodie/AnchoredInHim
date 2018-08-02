@@ -12,11 +12,13 @@ namespace AnchoredinHim.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Blog
+    public partial class Volunteer
     {
-        public int BlogID { get; set; }
-        public string Post { get; set; }
+        public int VolunteerID { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Phone_Number { get; set; }
     
-        public virtual Archive Archive { get; set; }
+        public virtual Event Event { get; set; }
     }
 }

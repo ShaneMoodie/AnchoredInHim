@@ -14,11 +14,12 @@ namespace AnchoredinHim.Models
     
     public partial class Event
     {
-        public string EventID { get; set; }
+        public int EventID { get; set; }
         public string Name { get; set; }
         public System.DateTime Date { get; set; }
         public string Location { get; set; }
     
         public virtual Archive Archive { get; set; }
+        public virtual Volunteer Volunteer { get; set; }
     }
 }

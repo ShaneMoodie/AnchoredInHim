@@ -23,6 +23,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Archive.ArchivesID)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Volunteer.Name)
+        </th>
         <th></th>
     </tr>
 
@@ -39,6 +42,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Archive.ArchivesID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Volunteer.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.EventID }) |

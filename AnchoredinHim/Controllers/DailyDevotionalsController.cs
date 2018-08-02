@@ -8,11 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using AnchoredinHim.Models;
 
-namespace AnchoredinHim.Controllers
+namespace AnchoredinHim.Views.DailyDevotionals
 {
     public class DailyDevotionalsController : Controller
     {
-        private AnchoredinHimEntities db = new AnchoredinHimEntities();
+        private AnchoredinHimEntities1 db = new AnchoredinHimEntities1();
 
         // GET: DailyDevotionals
         public ActionResult Index()
@@ -22,7 +22,7 @@ namespace AnchoredinHim.Controllers
         }
 
         // GET: DailyDevotionals/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -62,7 +62,7 @@ namespace AnchoredinHim.Controllers
         }
 
         // GET: DailyDevotionals/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -95,7 +95,7 @@ namespace AnchoredinHim.Controllers
         }
 
         // GET: DailyDevotionals/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -112,7 +112,7 @@ namespace AnchoredinHim.Controllers
         // POST: DailyDevotionals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int id)
         {
             DailyDevotional dailyDevotional = db.DailyDevotionals.Find(id);
             db.DailyDevotionals.Remove(dailyDevotional);

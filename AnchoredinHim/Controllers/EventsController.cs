@@ -12,17 +12,17 @@ namespace AnchoredinHim.Controllers
 {
     public class EventsController : Controller
     {
-        private AnchoredinHimEntities db = new AnchoredinHimEntities();
+        private AnchoredinHimEntities1 db = new AnchoredinHimEntities1();
 
         // GET: Events
         public ActionResult Index()
         {
-            var events = db.Events.Include(d => d.Archive);
+            var events = db.Events.Include(d => d.Archive).Include(d => d.Volunteer);
             return View(events.ToList());
         }
 
         // GET: Events/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -40,6 +40,7 @@ namespace AnchoredinHim.Controllers
         public ActionResult Create()
         {
             ViewBag.EventID = new SelectList(db.Archives, "ArchivesID", "ArchivesID");
+            ViewBag.EventID = new SelectList(db.Volunteers, "VolunteerID", "Name");
             return View();
         }
 
@@ -58,11 +59,12 @@ namespace AnchoredinHim.Controllers
             }
 
             ViewBag.EventID = new SelectList(db.Archives, "ArchivesID", "ArchivesID", @event.EventID);
+            ViewBag.EventID = new SelectList(db.Volunteers, "VolunteerID", "Name", @event.EventID);
             return View(@event);
         }
 
         // GET: Events/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -74,6 +76,7 @@ namespace AnchoredinHim.Controllers
                 return HttpNotFound();
             }
             ViewBag.EventID = new SelectList(db.Archives, "ArchivesID", "ArchivesID", @event.EventID);
+            ViewBag.EventID = new SelectList(db.Volunteers, "VolunteerID", "Name", @event.EventID);
             return View(@event);
         }
 
@@ -91,11 +94,12 @@ namespace AnchoredinHim.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.EventID = new SelectList(db.Archives, "ArchivesID", "ArchivesID", @event.EventID);
+            ViewBag.EventID = new SelectList(db.Volunteers, "VolunteerID", "Name", @event.EventID);
             return View(@event);
         }
 
         // GET: Events/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -112,7 +116,7 @@ namespace AnchoredinHim.Controllers
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int id)
         {
             Event @event = db.Events.Find(id);
             db.Events.Remove(@event);

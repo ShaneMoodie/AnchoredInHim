@@ -10,120 +10,107 @@ using AnchoredinHim.Models;
 
 namespace AnchoredinHim.Controllers
 {
-    public class ArchivesController : Controller
+    public class ATeamBmoresController : Controller
     {
         private AnchoredinHimEntities1 db = new AnchoredinHimEntities1();
 
-        // GET: Archives
+        // GET: ATeamBmores
         public ActionResult Index()
         {
-            var archives = db.Archives.Include(a => a.Blog).Include(a => a.DailyDevotional).Include(a => a.Event);
-            return View(archives.ToList());
+            return View(db.ATeamBmores.ToList());
         }
 
-        // GET: Archives/Details/5
+        // GET: ATeamBmores/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            ATeamBmore aTeamBmore = db.ATeamBmores.Find(id);
+            if (aTeamBmore == null)
             {
                 return HttpNotFound();
             }
-            return View(archive);
+            return View(aTeamBmore);
         }
 
-        // GET: Archives/Create
+        // GET: ATeamBmores/Create
         public ActionResult Create()
         {
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post");
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo");
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name");
             return View();
         }
 
-        // POST: Archives/Create
+        // POST: ATeamBmores/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ArchivesID,Date")] Archive archive)
+        public ActionResult Create([Bind(Include = "PostID,Post")] ATeamBmore aTeamBmore)
         {
             if (ModelState.IsValid)
             {
-                db.Archives.Add(archive);
+                db.ATeamBmores.Add(aTeamBmore);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            return View(aTeamBmore);
         }
 
-        // GET: Archives/Edit/5
+        // GET: ATeamBmores/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            ATeamBmore aTeamBmore = db.ATeamBmores.Find(id);
+            if (aTeamBmore == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            return View(aTeamBmore);
         }
 
-        // POST: Archives/Edit/5
+        // POST: ATeamBmores/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ArchivesID,Date")] Archive archive)
+        public ActionResult Edit([Bind(Include = "PostID,Post")] ATeamBmore aTeamBmore)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(archive).State = EntityState.Modified;
+                db.Entry(aTeamBmore).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ArchivesID = new SelectList(db.Blogs, "BlogID", "Post", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.DailyDevotionals, "DailyDevoID", "Devo", archive.ArchivesID);
-            ViewBag.ArchivesID = new SelectList(db.Events, "EventID", "Name", archive.ArchivesID);
-            return View(archive);
+            return View(aTeamBmore);
         }
 
-        // GET: Archives/Delete/5
+        // GET: ATeamBmores/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Archive archive = db.Archives.Find(id);
-            if (archive == null)
+            ATeamBmore aTeamBmore = db.ATeamBmores.Find(id);
+            if (aTeamBmore == null)
             {
                 return HttpNotFound();
             }
-            return View(archive);
+            return View(aTeamBmore);
         }
 
-        // POST: Archives/Delete/5
+        // POST: ATeamBmores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Archive archive = db.Archives.Find(id);
-            db.Archives.Remove(archive);
+            ATeamBmore aTeamBmore = db.ATeamBmores.Find(id);
+            db.ATeamBmores.Remove(aTeamBmore);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

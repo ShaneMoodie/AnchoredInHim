@@ -1,4 +1,4 @@
-﻿@model AnchoredinHim.Models.Event
+﻿@model AnchoredinHim.Models.Volunteer
 
 @{
     ViewBag.Title = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Event</h4>
+    <h4>Volunteer</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,35 +20,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Address)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Address)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Phone_Number)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.Phone_Number)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Archive.ArchivesID)
+            @Html.DisplayNameFor(model => model.Event.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Archive.ArchivesID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Volunteer.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Volunteer.Name)
+            @Html.DisplayFor(model => model.Event.Name)
         </dd>
 
     </dl>
