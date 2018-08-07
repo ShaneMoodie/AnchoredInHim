@@ -4,54 +4,67 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<script src="~/Content/js/Events.js"></script>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Location)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Archive.ArchivesID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Volunteer.Name)
-        </th>
-        <th></th>
-    </tr>
+<div ng-controller="KitchenSinkCtrl as vm">
+    <h2 class="text-center">{{ vm.calendarTitle }}</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Archive.ArchivesID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Volunteer.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.EventID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.EventID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.EventID })
-        </td>
-    </tr>
-}
+    <div class="row">
 
-</table>
+        <div class="col-md-6 text-center">
+            <div class="btn-group">
+
+                <button class="btn btn-primary"
+                        mwl-date-modifier
+                        date="vm.viewDate"
+                        decrement="vm.calendarView"
+                        ng-click="vm.cellIsOpen = false">
+                    Previous
+                </button>
+                <button class="btn btn-default"
+                        mwl-date-modifier
+                        date="vm.viewDate"
+                        set-to-today
+                        ng-click="vm.cellIsOpen = false">
+                    Today
+                </button>
+                <button class="btn btn-primary"
+                        mwl-date-modifier
+                        date="vm.viewDate"
+                        increment="vm.calendarView"
+                        ng-click="vm.cellIsOpen = false">
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <br class="visible-xs visible-sm">
+
+        <div class="col-md-6 text-center">
+            <div class="btn-group">
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'year'" ng-click="vm.cellIsOpen = false">Year</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'month'" ng-click="vm.cellIsOpen = false">Month</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'week'" ng-click="vm.cellIsOpen = false">Week</label>
+                <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'day'" ng-click="vm.cellIsOpen = false">Day</label>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <mwl-calendar events="vm.events"
+                  view="vm.calendarView"
+                  view-title="vm.calendarTitle"
+                  view-date="vm.viewDate"
+                  on-event-click="vm.eventClicked(calendarEvent)"
+                  on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+                  cell-is-open="vm.cellIsOpen"
+                  day-view-start="06:00"
+                  day-view-end="22:59"
+                  day-view-split="30"
+                  cell-modifier="vm.modifyCell(calendarCell)"
+                  cell-auto-open-disabled="true"
+                  on-timespan-click="vm.timespanClicked(calendarDate, calendarCell)">
+    </mwl-calendar>
+</div>
