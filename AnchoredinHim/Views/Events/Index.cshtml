@@ -5,6 +5,12 @@
 }
 
 <script src="~/Content/js/Events.js"></script>
+<script src="path/to/angular.js"></script>
+<script src="path/to/angular-touch.js"></script>
+<link href="~/Content/css/Event.css" rel="stylesheet" />
+<link href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css" rel="stylesheet">
+<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.min.js"></script>
+
 
 <div ng-controller="KitchenSinkCtrl as vm">
     <h2 class="text-center">{{ vm.calendarTitle }}</h2>
@@ -67,4 +73,3 @@
                   cell-auto-open-disabled="true"
                   on-timespan-click="vm.timespanClicked(calendarDate, calendarCell)">
     </mwl-calendar>
-</div>

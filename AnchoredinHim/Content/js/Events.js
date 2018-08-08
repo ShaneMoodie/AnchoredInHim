@@ -1,105 +1,108 @@
-﻿angular
-    .module('mwl.calendar.docs') //you will need to declare your module with the dependencies ['mwl.calendar', 'ui.bootstrap', 'ngAnimate']
-    .controller('KitchenSinkCtrl', function (moment, alert, calendarConfig) {
+﻿'use strict';
+
+angular
+    .module('mwl.calendar.docs', ['mwl.calendar', 'ui.bootstrap', 'ngTouch', 'ngAnimate', 'oc.lazyLoad', 'hljs', 'colorpicker.module'])
+    .controller('ExamplesCtrl', function ($http, $rootScope, $compile, $q, $location, $ocLazyLoad, plunkGenerator, moment) {
 
         var vm = this;
 
-        //These variables MUST be set as a minimum for the calendar to work
-        vm.calendarView = 'month';
-        vm.viewDate = new Date();
-        var actions = [{
-            label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
-            onClick: function (args) {
-                alert.show('Edited', args.calendarEvent);
-            }
-        }, {
-            label: '<i class=\'glyphicon glyphicon-remove\'></i>',
-            onClick: function (args) {
-                alert.show('Deleted', args.calendarEvent);
-            }
-        }];
-        vm.events = [
-            {
-                title: 'An event',
-                color: calendarConfig.colorTypes.warning,
-                startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-                endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-                draggable: true,
-                resizable: true,
-                actions: actions
-            }, {
-                title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-                color: calendarConfig.colorTypes.info,
-                startsAt: moment().subtract(1, 'day').toDate(),
-                endsAt: moment().add(5, 'days').toDate(),
-                draggable: true,
-                resizable: true,
-                actions: actions
-            }, {
-                title: 'This is a really long event title that occurs on every year',
-                color: calendarConfig.colorTypes.important,
-                startsAt: moment().startOf('day').add(7, 'hours').toDate(),
-                endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-                recursOn: 'year',
-                draggable: true,
-                resizable: true,
-                actions: actions
-            }
-        ];
-
-        vm.cellIsOpen = true;
-
-        vm.addEvent = function () {
-            vm.events.push({
-                title: 'New event',
-                startsAt: moment().startOf('day').toDate(),
-                endsAt: moment().endOf('day').toDate(),
-                color: calendarConfig.colorTypes.important,
-                draggable: true,
-                resizable: true
+        function loadFile(path) {
+            return $http.get(path, {
+                transformResponse: function (data) {
+                    return data;
+                }
             });
+        }
+
+        var helpers = {
+            templates: [
+                'modalContent.html',
+                'calendarControls.html'
+            ]
         };
 
-        vm.eventClicked = function (event) {
-            alert.show('Clicked', event);
-        };
+        loadFile('docs/examples/helpers.js').then(function (result) {
+            helpers.scripts = result.data;
+        });
 
-        vm.eventEdited = function (event) {
-            alert.show('Edited', event);
-        };
+        var previousScope;
 
-        vm.eventDeleted = function (event) {
-            alert.show('Deleted', event);
-        };
+        vm.loadExample = function (demo) {
+            vm.activeExample = angular.copy(demo);
+            vm.showDemoTab = true;
+            $location.search('example', demo.key);
+            var scriptPath = 'docs/examples/' + demo.key + '/javascript.js';
+            var markupPath = 'docs/examples/' + demo.key + '/markup.html';
 
-        vm.eventTimesChanged = function (event) {
-            alert.show('Dropped or resized', event);
-        };
+            loadFile(scriptPath).then(function (result) {
+                vm.activeExample.javascript = result.data;
+            });
 
-        vm.toggle = function ($event, field, event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            event[field] = !event[field];
-        };
-
-        vm.timespanClicked = function (date, cell) {
-
-            if (vm.calendarView === 'month') {
-                if ((vm.cellIsOpen && moment(date).startOf('day').isSame(moment(vm.viewDate).startOf('day'))) || cell.events.length === 0 || !cell.inMonth) {
-                    vm.cellIsOpen = false;
-                } else {
-                    vm.cellIsOpen = true;
-                    vm.viewDate = date;
+            $q.all({
+                markup: loadFile(markupPath),
+                script: $ocLazyLoad.load(scriptPath)
+            }).then(function (result) {
+                vm.activeExample.markup = result.markup.data;
+                var demoContainer = angular.element(document.getElementById('demoContainer'));
+                demoContainer.html(vm.activeExample.markup);
+                var scope = $rootScope.$new();
+                $compile(demoContainer)(scope);
+                if (previousScope) {
+                    previousScope.$destroy();
                 }
-            } else if (vm.calendarView === 'year') {
-                if ((vm.cellIsOpen && moment(date).startOf('month').isSame(moment(vm.viewDate).startOf('month'))) || cell.events.length === 0) {
-                    vm.cellIsOpen = false;
-                } else {
-                    vm.cellIsOpen = true;
-                    vm.viewDate = date;
-                }
+                previousScope = scope;
+            });
+
+        };
+
+        vm.editActiveExample = function () {
+            plunkGenerator(angular.version.full, '3', '2', moment.version, helpers, vm.activeExample);
+        };
+
+        $http.get('docs/examples/examples.json').then(function (result) {
+            vm.examples = result.data;
+            if ($location.search().example) {
+                var exampleToLoad = vm.examples.filter(function (example) {
+                    return example.key === $location.search().example;
+                })[0];
+                vm.loadExample(exampleToLoad);
+            } else {
+                vm.loadExample(vm.examples[0]);
             }
+        });
 
+    })
+    .factory('plunkGenerator', function ($templateCache, $window) {
+
+        return function (ngVersion, bsVersion, uibVersion, momentVersion, helpers, content) {
+
+            var scriptContent = function (content) {
+                return "angular.module('mwl.calendar.docs', ['mwl.calendar', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);" + "\n" + content;
+            };
+
+            $window.createPlunker.Plunker.create()
+                .setDescription('http://mattlewis92.github.io/angular-bootstrap-calendar/')
+                .addIndexHtmlAttribute('ng-app', 'mwl.calendar.docs')
+                .addNpmPackage('moment', { version: momentVersion })
+                .addNpmPackage('interactjs', { version: 1 })
+                .addNpmPackage('angular', { version: ngVersion, filename: 'angular.js' })
+                .addNpmPackage('angular-animate', { version: ngVersion, filename: 'angular-animate.js' })
+                .addNpmPackage('angular-ui-bootstrap', { version: uibVersion, filename: 'dist/ui-bootstrap-tpls.js' })
+                .addNpmPackage('rrule', { version: 2 })
+                .addNpmPackage('angular-bootstrap-colorpicker', { version: 3 })
+                .addNpmPackage('angular-bootstrap-calendar')
+                .addNpmPackage('bootstrap', { filename: 'dist/css/bootstrap.css', version: bsVersion })
+                .addNpmPackage('angular-bootstrap-colorpicker', { version: 3, filename: 'css/colorpicker.min.css' })
+                .addNpmPackage('angular-bootstrap-calendar', { filename: 'dist/css/angular-bootstrap-calendar.min.css' })
+                .addFile({ name: 'example.js', contents: scriptContent(content.javascript) })
+                .addFile({ name: 'helpers.js', contents: helpers.scripts })
+                .setIndexBody(content.markup)
+                .addFiles(helpers.templates.map(function (templateName) {
+                    return { name: templateName, contents: $templateCache.get(templateName) };
+                }))
+                .save();
         };
-
+    })
+    .config(function ($touchProvider) {
+        $touchProvider.ngClickOverrideEnabled(true);
     });

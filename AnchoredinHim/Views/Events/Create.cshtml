@@ -4,56 +4,99 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Event</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.EventID, "EventID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("EventID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.EventID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+<h3 id="event-editor">
+    Edit events
+    <button class="btn btn-primary pull-right"
+            ng-click="vm.addEvent()">
+        Add new
+    </button>
+    <div class="clearfix"></div>
+</h3>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Primary color</th>
+            <th>Secondary color</th>
+            <th>Starts at</th>
+            <th>Ends at</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="event in vm.events track by $index">
+            <td>
+                <input type="text"
+                       class="form-control"
+                       ng-model="event.title">
+            </td>
+            <td>
+                <input class="form-control" colorpicker type="text" ng-model="event.color.primary">
+            </td>
+            <td>
+                <input class="form-control" colorpicker type="text" ng-model="event.color.secondary">
+            </td>
+            <td>
+                <p class="input-group" style="max-width: 250px">
+                    <input type="text"
+                           class="form-control"
+                           readonly
+                           uib-datepicker-popup="dd MMMM yyyy"
+                           ng-model="event.startsAt"
+                           is-open="event.startOpen"
+                           close-text="Close">
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="vm.toggle($event, 'startOpen', event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </p>
+                <div uib-timepicker
+                     ng-model="event.startsAt"
+                     hour-step="1"
+                     minute-step="15"
+                     show-meridian="true">
+                </div>
+            </td>
+            <td>
+                <p class="input-group" style="max-width: 250px">
+                    <input type="text"
+                           class="form-control"
+                           readonly
+                           uib-datepicker-popup="dd MMMM yyyy"
+                           ng-model="event.endsAt"
+                           is-open="event.endOpen"
+                           close-text="Close">
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="vm.toggle($event, 'endOpen', event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </p>
+                <div uib-timepicker
+                     ng-model="event.endsAt"
+                     hour-step="1"
+                     minute-step="15"
+                     show-meridian="true">
+                </div>
+            </td>
+            <td>
+                <button class="btn btn-danger"
+                        ng-click="vm.events.splice($index, 1)">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
 </div>
